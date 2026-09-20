@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="JetBoomer AI Trading Command Center">
+<title>JetBoomer AI — Trading Command Center</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app-shell">
+<header class="topbar">
+<div><div class="brand">JETBOOMER <span>AI</span></div><div class="subtitle">AUTONOMOUS TRADING COMMAND CENTER</div></div>
+<div class="top-actions"><div class="connection"><i></i> MT5 CONNECTED</div><button class="mode" id="modeBtn">LIVE</button></div>
+</header>
+<main>
+<section class="kpis" id="kpis"></section>
+<section class="grid">
+<article class="card market">
+<div class="section-head"><div><small>AI MARKET INTELLIGENCE</small><h2>EURUSD <span class="positive">+0.42%</span></h2></div><div class="price">1.17482</div></div>
+<div class="chart-wrap"><canvas id="chart" aria-label="EURUSD market chart"></canvas></div>
+<div class="signal-row"><div><small>AI SIGNAL</small><strong>Bullish continuation</strong><p>Confidence 94% · Regime: TRENDING</p></div><button class="signal">BUY · EURUSD</button></div>
+</article>
+<article class="card ea">
+<div class="section-head"><small>EA ORCHESTRATOR</small><button class="icon" id="refreshEas">↻</button></div>
+<div id="eas"></div>
+</article>
+</section>
+<section class="card actions">
+<small>QUICK ACTIONS</small><div class="action-grid">
+<button data-action="BUY">BUY</button><button data-action="SELL">SELL</button><button data-action="CLOSE ALL">CLOSE ALL</button><button data-action="PAUSE EAs">PAUSE EAs</button><button class="danger" data-action="PANIC">PANIC</button>
+</div>
+<div id="toast" role="status" aria-live="polite"></div>
+</section>
+<section class="card health"><small>SYSTEM HEALTH</small><div class="health-grid">
+<div><b>Risk engine</b><span class="ok">● OK</span></div><div><b>Broker bridge</b><span class="ok">● OK</span></div><div><b>License</b><span class="info">● ACTIVE</span></div><div><b>AI scanner</b><span class="ok">● ONLINE</span></div><div><b>Voice control</b><span>● READY</span></div><div><b>Audit log</b><span>● SYNCED</span></div>
+</div></section>
+</main>
+<footer>JetBoomer AI v1 · Demo control interface · Connect a broker bridge before live execution</footer>
+</div>
+<script src="app.js"></script>
+</body></html>
