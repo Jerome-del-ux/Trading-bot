@@ -3,12 +3,17 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
+permissions:
+  contents: read
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: android-actions/setup-android@v3
+      - name: Accept Android SDK licenses
+        run: yes | sdkmanager --licenses >/dev/null || true
+      - name: Install Android SDK packages
+        run: sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0"
       - name: Install Gradle
         run: sudo apt-get update && sudo apt-get install -y gradle
       - name: Build debug APK
@@ -18,3 +23,4 @@ jobs:
         with:
           name: JetBoomer-AI-debug-apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 30
