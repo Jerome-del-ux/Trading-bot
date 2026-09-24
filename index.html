@@ -1,41 +1,110 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="JetBoomer AI Trading Command Center">
-<title>JetBoomer AI — Trading Command Center</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="JetBoomer AI — broker-ready trading command center">
+<title>JetBoomer AI — Command Center</title>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <div class="app-shell">
 <header class="topbar">
-<div><div class="brand">JETBOOMER <span>AI</span></div><div class="subtitle">AUTONOMOUS TRADING COMMAND CENTER</div></div>
-<div class="top-actions"><div class="connection"><i></i> MT5 CONNECTED</div><button class="mode" id="modeBtn">LIVE</button></div>
+  <div>
+    <div class="brand">JETBOOMER <span>AI</span></div>
+    <div class="subtitle">TRADING COMMAND CENTER · V3</div>
+  </div>
+  <div class="top-actions">
+    <div class="connection offline" id="connection"><i></i><span>MT5 BRIDGE OFFLINE</span></div>
+    <button class="mode demo" id="modeBtn">DEMO MODE</button>
+  </div>
 </header>
+
+<div class="notice" id="notice">
+  <b>Execution safety:</b> this web app is the control/monitoring layer. It does not contain broker credentials and cannot place MT5 trades by itself.
+  Use the included MQL5 Expert Advisor inside MetaTrader 5. The website becomes a real control panel only after an authenticated MT5 bridge is deployed.
+</div>
+
 <main>
 <section class="kpis" id="kpis"></section>
+
 <section class="grid">
 <article class="card market">
-<div class="section-head"><div><small>AI MARKET INTELLIGENCE</small><h2>EURUSD <span class="positive">+0.42%</span></h2></div><div class="price">1.17482</div></div>
-<div class="chart-wrap"><canvas id="chart" aria-label="EURUSD market chart"></canvas></div>
-<div class="signal-row"><div><small>AI SIGNAL</small><strong>Bullish continuation</strong><p>Confidence 94% · Regime: TRENDING</p></div><button class="signal">BUY · EURUSD</button></div>
+  <div class="section-head">
+    <div><small>MARKET ENGINE</small><h2 id="symbolTitle">EURUSD <span id="marketMode">SIMULATION</span></h2></div>
+    <div class="price" id="price">—</div>
+  </div>
+  <div class="chart-wrap"><canvas id="chart" aria-label="market simulation chart"></canvas></div>
+  <div class="signal-row">
+    <div>
+      <small>ENGINE SIGNAL</small>
+      <strong id="signalText">WAITING FOR DATA</strong>
+      <p id="signalMeta">No broker feed connected.</p>
+    </div>
+    <button class="signal" id="signalBtn">SIMULATE SIGNAL</button>
+  </div>
 </article>
+
 <article class="card ea">
-<div class="section-head"><small>EA ORCHESTRATOR</small><button class="icon" id="refreshEas">↻</button></div>
-<div id="eas"></div>
+  <div class="section-head"><small>ENGINE MODULES</small><button class="icon" id="refreshEas">↻</button></div>
+  <div id="eas"></div>
 </article>
 </section>
-<section class="card actions">
-<small>QUICK ACTIONS</small><div class="action-grid">
-<button data-action="BUY">BUY</button><button data-action="SELL">SELL</button><button data-action="CLOSE ALL">CLOSE ALL</button><button data-action="PAUSE EAs">PAUSE EAs</button><button class="danger" data-action="PANIC">PANIC</button>
-</div>
-<div id="toast" role="status" aria-live="polite"></div>
+
+<section class="grid lower">
+<article class="card">
+  <div class="section-head"><small>RISK CONFIGURATION</small><span class="pill" id="riskState">LOCAL</span></div>
+  <div class="form-grid">
+    <label>Risk / trade %<input id="risk" type="number" min="0.01" max="5" step="0.01" value="0.50"></label>
+    <label>Daily loss %<input id="daily" type="number" min="0.1" max="20" step="0.1" value="2"></label>
+    <label>Max drawdown %<input id="dd" type="number" min="0.5" max="50" step="0.5" value="8"></label>
+    <label>Max spread points<input id="spread" type="number" min="1" max="500" step="1" value="25"></label>
+    <label>Max positions<input id="positions" type="number" min="1" max="20" step="1" value="2"></label>
+    <label>Min AI confidence<input id="confidence" type="number" min="0.50" max="0.99" step="0.01" value="0.68"></label>
+  </div>
+  <button class="save" id="saveRisk">SAVE LOCAL CONFIG</button>
+  <div class="tiny">These settings are saved in this browser. They do not change MT5 until a bridge is connected.</div>
+</article>
+
+<article class="card">
+  <div class="section-head"><small>EXPLAINABLE AI SCORE</small><span class="pill" id="scorePill">0%</span></div>
+  <div id="scores"></div>
+  <div class="tiny">V3 uses an auditable ensemble. It is not a trained machine-learning model.</div>
+</article>
 </section>
-<section class="card health"><small>SYSTEM HEALTH</small><div class="health-grid">
-<div><b>Risk engine</b><span class="ok">● OK</span></div><div><b>Broker bridge</b><span class="ok">● OK</span></div><div><b>License</b><span class="info">● ACTIVE</span></div><div><b>AI scanner</b><span class="ok">● ONLINE</span></div><div><b>Voice control</b><span>● READY</span></div><div><b>Audit log</b><span>● SYNCED</span></div>
-</div></section>
+
+<section class="card actions">
+  <div class="section-head"><small>EXECUTION COMMANDS</small><span class="pill warning">BRIDGE REQUIRED</span></div>
+  <div class="action-grid">
+    <button data-action="BUY">BUY</button>
+    <button data-action="SELL">SELL</button>
+    <button data-action="CLOSE ALL">CLOSE ALL</button>
+    <button data-action="PAUSE">PAUSE ENGINE</button>
+    <button class="danger" data-action="PANIC">PANIC LOCK</button>
+  </div>
+  <div id="toast" role="status" aria-live="polite"></div>
+</section>
+
+<section class="card health">
+  <div class="section-head"><small>SYSTEM HEALTH</small><span class="pill" id="healthPill">LOCAL</span></div>
+  <div class="health-grid">
+    <div><b>Risk engine</b><span class="ok">● LOCAL</span></div>
+    <div><b>MT5 bridge</b><span class="bad">● OFFLINE</span></div>
+    <div><b>License</b><span class="info">● DEV MODE</span></div>
+    <div><b>AI scanner</b><span class="ok">● READY</span></div>
+    <div><b>Voice layer</b><span>● API READY</span></div>
+    <div><b>Audit log</b><span class="ok">● LOCAL</span></div>
+  </div>
+</section>
+
+<section class="card log-card">
+  <div class="section-head"><small>AUDIT LOG</small><button class="icon" id="clearLog">Clear</button></div>
+  <pre id="log"></pre>
+</section>
 </main>
-<footer>JetBoomer AI v1 · Demo control interface · Connect a broker bridge before live execution</footer>
+
+<footer>JetBoomer AI v3 · MT5 Expert Advisor + broker-ready web control layer · Test with Strategy Tester and demo account before live use.</footer>
 </div>
 <script src="app.js"></script>
-</body></html>
+</body>
+</html>
